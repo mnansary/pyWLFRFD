@@ -4,9 +4,9 @@ Water Level prediction from RainFall Data
     Version: 0.0.1    
     Author : Md. Nazmuddoha Ansary    
                   
-![](/INFO/src_img/python.ico?raw=true )
-![](/INFO/src_img/keras.ico?raw=true)
-![](/INFO/src_img/pandas.ico?raw=true)
+![](/info/src_img/python.ico?raw=true )
+![](/info/src_img/keras.ico?raw=true)
+![](/info/src_img/pandas.ico?raw=true)
 
 # Version and Requirements
 * Python == 3.6.8
