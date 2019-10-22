@@ -1,0 +1,18 @@
+{
+    "ARGS":
+    {
+        "SHP_FILE"                : "/home/ansary/RESEARCH/RainFall/Data/Borak/Borak.shp",
+        "WATER_LEVEL_CSV"         : "/home/ansary/RESEARCH/RainFall/Data/Raw/waterlevel.csv",
+        "RAINFALL_CSV"            : "/home/ansary/RESEARCH/RainFall/Data/Raw/rainfall.csv",
+        "OUTPUT_DIR"              : "/home/ansary/RESEARCH/RainFall/Data/"
+    },
+    "FLAGS":
+    {
+        "eval_split_timeframe"   : "2013-1-1",
+        "test_split_timeframe"   : "2014-1-1",
+        "pred_len"               : 1,
+        "seq_len"                : 7,
+        "max_water_level"        : 20.0,
+        "max_rainfall"           : 585.0
+    }
+} 
