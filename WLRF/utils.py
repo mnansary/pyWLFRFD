@@ -49,10 +49,8 @@ class Preprocessor(object):
         self.h5_dir=create_dir(self.save_dir,'h5s')
         self.X_Train_h5 =   os.path.join(self.h5_dir,'X_Train.h5')
         self.X_Eval_h5  =   os.path.join(self.h5_dir,'X_Eval.h5')
-        self.X_Test_h5  =   os.path.join(self.h5_dir,'X_Test.h5')
         self.Y_Train_h5 =   os.path.join(self.h5_dir,'Y_Train.h5')
         self.Y_Eval_h5  =   os.path.join(self.h5_dir,'Y_Eval.h5')
-        self.Y_Test_h5  =   os.path.join(self.h5_dir,'Y_Test.h5')
         # Flags
         self.eval_split_timeframe   =   FLAGS.eval_split_timeframe
         self.test_split_timeframe   =   FLAGS.test_split_timeframe
@@ -110,7 +108,7 @@ class Preprocessor(object):
         
         return rain_fall_df  
     
-    def __preprocessDataFrame(self,data_frame,shuffle_flag=True):
+    def preprocessDataFrame(self,data_frame,shuffle_flag=True):
         sequential_data=[]
         prev_days=deque(maxlen=self.seq_len)    
         for i in data_frame.values:
@@ -137,34 +135,28 @@ class Preprocessor(object):
         df.dropna(inplace=True)
         # split data
         LOG_INFO('Spliting Dataframes')
-        test_df     =   df.loc[df.index >= self.test_split_timeframe].copy()
         train_df    =   df.loc[df.index <  self.eval_split_timeframe].copy()
         eval_df     =   df.loc[(df.index >=  self.eval_split_timeframe) & (df.index < self.test_split_timeframe)].copy()
         # drop Nan Values
-        test_df.dropna(inplace=True)
         train_df.dropna(inplace=True)
         eval_df.dropna(inplace=True)
         # array data
         LOG_INFO('Getting Array Data')
-        X_Train,Y_Train  =   self.__preprocessDataFrame(train_df,shuffle_flag=True)
-        X_Eval,Y_Eval    =   self.__preprocessDataFrame(eval_df ,shuffle_flag=True)
-        X_Test,Y_Test    =   self.__preprocessDataFrame(test_df ,shuffle_flag=False)
+        X_Train,Y_Train  =   self.preprocessDataFrame(train_df,shuffle_flag=True)
+        X_Eval,Y_Eval    =   self.preprocessDataFrame(eval_df ,shuffle_flag=True)
         # INFO
         print(' Train   => X:{} Y:{}'.format(X_Train.shape,Y_Train.shape)) 
         print(' Eval    => X:{} Y:{}'.format(X_Eval.shape,Y_Eval.shape)) 
-        print(' Test    => X:{} Y:{}'.format(X_Test.shape,Y_Test.shape)) 
         # Saving Data
         LOG_INFO('Saving h5 Data')
         # X data
         saveh5(self.X_Train_h5,X_Train)
         saveh5(self.X_Eval_h5 ,X_Eval)
-        saveh5(self.X_Test_h5 ,X_Test)
         # Y data
         saveh5(self.Y_Train_h5,Y_Train)
         saveh5(self.Y_Eval_h5 ,Y_Eval)
-        saveh5(self.Y_Test_h5 ,Y_Test)
-        # Save df as csv
-        LOG_INFO('Saving Test Targets As CSV <Visualization Purpose>')
-        DF = test_df[['Target']].copy()
-        WL_TEST_CSV_PATH = os.path.join(self.save_dir,'TEST.csv')
-        DF.to_csv(WL_TEST_CSV_PATH,sep='\t',encoding='utf-8')
+        # test data
+        self.test_df= df.loc[df.index >= self.test_split_timeframe].copy()
+        self.test_df= eval_df.tail(self.seq_len).append(self.test_df)
+        self.test_df.dropna(inplace=True)
+            

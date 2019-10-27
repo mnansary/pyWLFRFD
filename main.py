@@ -5,7 +5,13 @@
 from __future__ import print_function
 from termcolor import colored
 
-from model.utils import Preprocessor,readh5,readJson
+from WLRF.utils import Preprocessor,readh5,readJson
+from WLRF.models import train_model,test_model
+
+import argparse
+parser = argparse.ArgumentParser(description='WaterLevel Data Prediction From RainFall Data ')
+parser.add_argument("model_type", help="name of the LSTM model to be USED. Available: StackedLSTM")
+p_args = parser.parse_args()
 #-----------------------------------------------------Load Config----------------------------------------------------------
 config_data=readJson('config.json')
 
@@ -21,15 +27,36 @@ class FLAGS:
     pred_len             = config_data['FLAGS']["pred_len"]    
     seq_len              = config_data['FLAGS']["seq_len"]
     max_water_level      = config_data['FLAGS']["max_water_level"]
-    max_rainfall         = config_data['FLAGS']["max_rainfall"]            
+    max_rainfall         = config_data['FLAGS']["max_rainfall"]
+
+class PARAMS:
+    MAX_FEATS   = 64
+    INPUT_SHAPE = None
+    EPOCHS      = 500
+    BATCH_SIZE  = 128
+    
 #-----------------------------------------------------------------------------------------------------------------------------------
 import time
 import os
 import numpy as np 
 #-----------------------------------------------------------------------------------------------------------------------------------
-def main(argv):
-    obj=Preprocessor(ARGS,FLAGS)
-    obj.processData()
+def main(p_args):
+    # Preprocess
+    PREP_OBJ=Preprocessor(ARGS,FLAGS)
+    PREP_OBJ.processData()
+    
+    # DataSet
+    X_Train =   readh5(PREP_OBJ.X_Train_h5)
+    Y_Train =   readh5(PREP_OBJ.Y_Train_h5)
+    X_Eval  =   readh5(PREP_OBJ.X_Eval_h5 )
+    Y_Eval  =   readh5(PREP_OBJ.Y_Eval_h5 )
+    DataSet =   (X_Train,Y_Train,X_Eval,Y_Eval)
+    # Set Param
+    PARAMS.INPUT_SHAPE=X_Train.shape[1:]
+    # Train
+    model,model_name=train_model(p_args.model_type,DataSet,ARGS,PARAMS)
+    # Test
+    test_model(ARGS,model,model_name,PREP_OBJ)
 #-----------------------------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
-    main('RAINFALL')
+    main(p_args)
