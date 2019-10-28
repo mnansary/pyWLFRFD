@@ -15,9 +15,14 @@ Water Level prediction from RainFall Data
 * numpy==1.17.3
 * pandas==0.25.2
 
+<<<<<<< HEAD
 1.  Create a Virtualenv 
 2.  *pip3 install -r requirements.txt*
 
+=======
+1.Create a Virtualenv   
+2.*pip3 install -r requirements.txt*  
+>>>>>>> 67d7a75f2a9fde68e15aa1a38d5cac3fb0f5c8c8
 **NOTE:** tensorflow is used as backend
 
 #  DataSet  
@@ -58,7 +63,10 @@ The dataset comprises of three parts:
 * Maximum WaterLevel is recorded to be : ~ **20 m** (Taken as int for normalization ease)  
 
 #  Execution
+<<<<<<< HEAD
 
+=======
+>>>>>>> 67d7a75f2a9fde68e15aa1a38d5cac3fb0f5c8c8
 * Change The following Values in ***config.json*** 
 
         "ARGS":  
@@ -86,7 +94,7 @@ The dataset comprises of three parts:
         -h, --help  show this help message and exit
 
 
-**Results**
+# Results
 * If execution is successful a folder called **h5s** should be created with the following folder tree:
 
             h5s              
@@ -129,8 +137,13 @@ The implemented Model Structre is as follows:
 *   NUMBER OF TRAINING EPOCHS: **500**
 *   BATCH SIZE: **128**
 *   MAXIMUM FEATURE TAKEN AT ANY LAYER: **64**
+<<<<<<< HEAD
 *   R2 SCORE: **0.9654419438558642**
 *   Mean Absolute Error : **0.1374554411601445**
+=======
+*   R2 SCORE: **0.9601588319668203**
+*   Mean Absolute Error : **0.14679548759599492**
+>>>>>>> 67d7a75f2a9fde68e15aa1a38d5cac3fb0f5c8c8
 
 The training **loss history** and **prediction with target** plot is as follows:
 
