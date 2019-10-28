@@ -44,7 +44,6 @@ def main(p_args):
     # Preprocess
     PREP_OBJ=Preprocessor(ARGS,FLAGS)
     PREP_OBJ.processData()
-    
     # DataSet
     X_Train =   readh5(PREP_OBJ.X_Train_h5)
     Y_Train =   readh5(PREP_OBJ.Y_Train_h5)

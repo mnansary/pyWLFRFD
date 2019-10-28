@@ -103,7 +103,7 @@ class Preprocessor(object):
                     final_lon.append(lon[j])
 
         final_lat_lon=[str(final_lat[i]) +"_"+ str(final_lon[i]) for i in range(len(final_lat))]
-        
+        print(final_lat_lon)
         rain_fall_df=rain_fall_df[final_lat_lon]
         
         return rain_fall_df  

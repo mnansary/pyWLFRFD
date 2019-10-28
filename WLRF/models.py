@@ -23,7 +23,7 @@ from sklearn.metrics import r2_score, mean_absolute_error
 def StackedLSTM(PARAMS):
     # layer features
     nb_layers=int(math.log2(PARAMS.MAX_FEATS))
-    layer_specs=[(2**i) for i in range(1,nb_layers)][::-1]
+    layer_specs=[(2**i) for i in range(2,nb_layers)][::-1]
     # model
     model=Sequential()
     # first LSTM Layer
@@ -32,7 +32,7 @@ def StackedLSTM(PARAMS):
     for i in range(len(layer_specs)):
         model.add(LSTM(layer_specs[i],return_sequences=True,activation='tanh'))
     # last layers
-    model.add(LSTM(1,return_sequences=False,activation='tanh'))
+    model.add(LSTM(2,return_sequences=False,activation='tanh'))
     model.add(Dense(1))
     model.compile(loss=mean_squared_error,optimizer=Adam())
     model_name='StackedLSTM_MAX_FEATs:{}_EPOCHS:{}'.format(PARAMS.MAX_FEATS,PARAMS.EPOCHS)
@@ -51,7 +51,7 @@ def train_model(model_type,DataSet,ARGS,PARAMS):
     # Model Info
     print(model.summary())
     # Save Model Arch
-    plot_model(model,to_file=os.path.join(save_dir,'{}_arch.png'.format(model_name)),show_shapes=True)
+    plot_model(model,to_file=os.path.join(save_dir,'arch.png'),show_shapes=True)
     # training
     history=model.fit(X_Train,
                       Y_Train,
@@ -65,11 +65,11 @@ def train_model(model_type,DataSet,ARGS,PARAMS):
     plt.ylabel('loss')
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper right')
-    plt.savefig(os.path.join(save_dir,'{}_loss.png'.format(model_name)))
+    plt.savefig(os.path.join(save_dir,'loss.png'))
     plt.clf()
     plt.close()    
     # save model weigths
-    model.save(os.path.join(save_dir,'{}_model.h5'.format(model_name)))
+    model.save(os.path.join(save_dir,'model.h5'))
     
     return model,model_name
 #--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ def test_model(ARGS,model,model_name,PREP_OBJ):
         pred_df.ix[i,'Prediction']=prediction[0][0]
     # save predictions
     pred_df.plot()
-    plt.savefig(os.path.join(save_dir,'{}_test.png'.format(model_name)))
+    plt.savefig(os.path.join(save_dir,'test.png'))
     # results
     r2 = r2_score( pred_df['Target'], pred_df['Prediction'] )
     mae = np.sqrt( mean_absolute_error( pred_df['Target'], pred_df['Prediction']) )
