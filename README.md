@@ -16,7 +16,8 @@ Water Level prediction from RainFall Data
 * pandas==0.25.2
 
 1.  Create a Virtualenv 
-2.  *pip3 install -r requirements.txt*
+2.  *pip3 install -r requirements.txt*  
+
 **NOTE:** tensorflow is used as backend
 
 #  DataSet  
